@@ -24,3 +24,41 @@ export const register = async (req, res) => {
         res.status(500).json({message: "Error al registrar el usuario", error: error.message});
     }
 }
+
+
+export const login = async(req, res) => {
+
+    const { email, password } = req.body;
+
+    try {
+
+        if (!email || !password) return res.status(400).json({ message: "Debes ingresar ambos datos." });
+
+        const user = await User.findOne({email: email});
+        if(!user) return res.status(400).json({ message: "Usuario o contraseña incorrectos." });
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid) return res.status(400).json({ message: "Usuario o contraseña incorrectos." });
+
+        // generar token
+        jwt.sign(
+            { id: user._id },
+            process.env.TOKEN_SECRET,
+            { expiresIn: "1h" },
+            (err, token) => {
+                err && res.status(400).json(`Error al generar el token: ${err.message}`);
+
+                res.cookie("token", token, {
+                    httpOnly: false,
+                    secure: true,
+                    sameSite: "none"
+                });
+                res.status(200).json({message: "Login exitoso!", user: user});
+            }
+        )
+
+        
+    } catch (error) {
+        res.status(500).json({message: "Error al loggearse en la aplicacion.", error: error.message});
+    }
+}
