@@ -19,8 +19,10 @@ app.use(cookieParser());
 // rutas de la aplicacion
 import authRoutes from "./routes/auth.routes.js"
 import categorieRouter from "./routes/categorie.routes.js";
+import productRouter from "./routes/product.routes.js";
 app.use("/api", authRoutes);
 app.use("/api", categorieRouter);
+app.use("/api", productRouter)
 
 
 const server = app.listen(port, () => console.log(`Server running on port: ${server.address().port}`));
