@@ -18,8 +18,10 @@ app.use(cookieParser());
 
 // rutas de la aplicacion
 import authRoutes from "./routes/auth.routes.js"
+import categorieRouter from "./routes/categorie.routes.js";
 app.use("/api", authRoutes);
+app.use("/api", categorieRouter);
 
 
-const server = app.listen(port, () => console.log(`Server running on port: ${port}`));
+const server = app.listen(port, () => console.log(`Server running on port: ${server.address().port}`));
 mongodbConnection();
