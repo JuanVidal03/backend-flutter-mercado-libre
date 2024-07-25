@@ -4,11 +4,11 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
 
-    let { fullName, email, password } = req.body;
+    let { fullName, email, password, gender, phone } = req.body;
     
     try {
 
-        if (!fullName || !email || !password) return res.status(400).json({message: "Debes ingresar todos los campos."});
+        if (!fullName || !email || !password || !gender || !phone) return res.status(400).json({message: "Debes ingresar todos los campos."});
 
         const foundUser = await User.findOne({email: email});
         if (foundUser) return res.status(400).json({message: `El usuario con email: '${email}' ya existe.`});
@@ -16,7 +16,7 @@ export const register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         password = await bcrypt.hash(password, salt);
 
-        const createdUser = await User.create({ fullName, email, password });
+        const createdUser = await User.create({ fullName, email, password, gender, phone });
 
         res.status(201).json({message: "Usuario creado exitosamente!", user: createdUser});
         

@@ -14,8 +14,15 @@ const userModel = new Schema({
     password: {
         type: String,
         required: true
+    },
+    gender: {
+        type: String,
+        required: true,
+    },
+    phone: {
+        type: String,
+        required: true,
     }
-
 })
 
 export const User = mongoose.model("User", userModel);
